@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_client_sse/constants/sse_request_type_enum.dart';
 import 'package:flutter_client_sse/flutter_client_sse.dart' as sse;
-void main() async{
-
+import 'package:sse_streaming_api_flutter/methods/even_flux_method.dart';
+void main() {
+subscribeViaEventFlux();
   runApp(const MyApp());
 }
 
@@ -42,34 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-void subscribeToSSE ()async {
-  sse.SSEClient.subscribeToSSE(
-      method: SSERequestType.POST,
-      url: 'https://api.elevenlabs.io/v1/text-to-speech/CwhRBWXzGAHq8TQ4Fs17/stream',
-      header: {
-      "Content-Type":"application/json",
-      "xi-api-key":"/keyHere",
-      },
-      body:{
-        
-  "text": "Hello World!!",
-  "voice_settings": {
-    "stability": 0.75,
-    "similarity_boost": 0.85
-  
-}
-      }).listen(
-    (event) {
-      print('Id: ' + (event.id ?? ""));
-      print('Event: ' + (event.event ?? ""));
-      print('Data: ' + (event.data ?? ""));
-    },
-  );
-}
+
 @override
 void initState(){
-  print('--LOG--');
-  subscribeToSSE();
     super.initState();
   }
 
