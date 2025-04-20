@@ -43,11 +43,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 void subscribeToSSE ()async {
-  final subscribeFromClient =  sse.SSEClient.subscribeToSSE(header:{},url: 'https://sse-fake.andros.dev/events/',method: SSERequestType.GET);
-  final pushFromServer = subscribeFromClient.listen((event)=>print(event));
-  //onDone
-  pushFromServer.onData((_)async => await pushFromServer.cancel());
-
+  sse.SSEClient.subscribeToSSE(
+      method: SSERequestType.POST,
+      url: 'https://api.elevenlabs.io/v1/text-to-speech/CwhRBWXzGAHq8TQ4Fs17/stream',
+      header: {
+      "Content-Type":"application/json",
+      "xi-api-key":"/keyHere",
+      },
+      body:{
+        
+  "text": "Hello World!!",
+  "voice_settings": {
+    "stability": 0.75,
+    "similarity_boost": 0.85
+  
+}
+      }).listen(
+    (event) {
+      print('Id: ' + (event.id ?? ""));
+      print('Event: ' + (event.event ?? ""));
+      print('Data: ' + (event.data ?? ""));
+    },
+  );
 }
 @override
 void initState(){
