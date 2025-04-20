@@ -1,9 +1,10 @@
+import 'package:eventflux/eventflux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_client_sse/constants/sse_request_type_enum.dart';
 import 'package:flutter_client_sse/flutter_client_sse.dart' as sse;
+import 'package:sse_streaming_api_flutter/chat_card.dart';
 import 'package:sse_streaming_api_flutter/methods/even_flux_method.dart';
 void main() {
-subscribeViaEventFlux(10);
   runApp(const MyApp());
 }
 
@@ -13,12 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SSE Api Connection',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Streaming API'),
     );
   }
 }
@@ -35,20 +36,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  
-  int _counter = 0;
+  int timer = 20;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
+List<EventFluxData>? events;
 @override
-void initState(){
+void initState() {
+  subscribeViaEventFlux(20, events);
+    Future.delayed(Duration(seconds: 1)).then((_){
+      --timer;
+      setState(() {
+        
+      });
+    })
+
+    ;
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,21 +64,16 @@ void initState(){
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+             Text(
+              'Connection will end in : $timer',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+           Expanded(child: ListView(
+            children:events == null ? [SizedBox(height: 10,)]: events!.map((event)=>ChatCard(name: event.event, message: event.data)).toList(),
+           )),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+     
     );
   }
 }
