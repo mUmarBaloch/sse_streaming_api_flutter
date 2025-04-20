@@ -3,7 +3,7 @@ import 'package:flutter_client_sse/constants/sse_request_type_enum.dart';
 import 'package:flutter_client_sse/flutter_client_sse.dart' as sse;
 import 'package:sse_streaming_api_flutter/methods/even_flux_method.dart';
 void main() {
-subscribeViaEventFlux();
+subscribeViaEventFlux(10);
   runApp(const MyApp());
 }
 
